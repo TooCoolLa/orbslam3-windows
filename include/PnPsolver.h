@@ -146,7 +146,7 @@ class PnPsolver {
   // Current Estimation
   double mRi[3][3];
   double mti[3];
-  cv::Mat mTcwi;
+  CvMat mTcwi;
   vector<bool> mvbInliersi;
   int mnInliersi;
 

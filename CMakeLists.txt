@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.10)
 project(ORB_SLAM3)
 
 IF(NOT CMAKE_BUILD_TYPE)
@@ -6,7 +6,7 @@ IF(NOT CMAKE_BUILD_TYPE)
 ENDIF()
 
 MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
-
+add_definitions(-DCOMPILEDWITHC11)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -W0 -MT -bigobj")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W0 -MT -bigobj")
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall   -O3")
@@ -35,11 +35,13 @@ endif()
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 
-find_package(OpenCV 3)
+set(OpenCV_STATIC ON)
+set(OpenCV_DIR "D:/AI/opencv3/build")
+find_package(OpenCV 3 QUIET)
 if(NOT OpenCV_FOUND)
-   find_package(OpenCV 2.4.3 QUIET)
+   find_package(OpenCV 3 QUIET)
    if(NOT OpenCV_FOUND)
-      message(FATAL_ERROR "OpenCV > 2.4.3 not found.")
+      message(FATAL_ERROR "OpenCV > 3 not found.")
    endif()
 endif()
 
@@ -123,7 +125,7 @@ target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
 ${EIGEN3_LIBS}
 ${Pangolin_LIBRARIES}
-${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/Release/DBoW2.lib
+${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/Release/DBoW2.dll
 ${PROJECT_SOURCE_DIR}/Thirdparty/g2o/build/Release/g2o.lib
 ${PROJECT_SOURCE_DIR}/Thirdparty/boost_1_67_0/lib64-msvc-14.1/libboost_serialization-vc141-mt-s-x64-1_67.lib
 )

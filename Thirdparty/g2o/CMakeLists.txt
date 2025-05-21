@@ -1,8 +1,7 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 SET(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 PROJECT(g2o)
-
 SET(g2o_C_FLAGS)
 SET(g2o_CXX_FLAGS)
 
@@ -24,6 +23,7 @@ endif(MSVC90)
 
 # Set the output directory for the build executables and libraries
 IF(WIN32)
+  add_compile_definitions(_WINDOWS)
   SET(g2o_LIBRARY_OUTPUT_DIRECTORY ${g2o_SOURCE_DIR}/bin CACHE PATH "Target for the libraries")
 ELSE(WIN32)
   SET(g2o_LIBRARY_OUTPUT_DIRECTORY ${g2o_SOURCE_DIR}/lib CACHE PATH "Target for the libraries")

@@ -1,5 +1,18 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.10)
 project("Pangolin")
+set(VCPKG_DIR "E:/Git/vcpkg/installed/x64-windows")
+set(GLEW_INCLUDE_DIR "${VCPKG_DIR}/include")
+set(GLEW_LIBRARY "${VCPKG_DIR}/lib/glew32s.lib")
+set(PNG_INCLUDE_DIR "${VCPKG_DIR}/include")
+set(PNG_LIBRARY "${VCPKG_DIR}/lib/libpng16.a")
+set(JPEG_INCLUDE_DIR "${VCPKG_DIR}/include")
+set(JPEG_LIBRARY "${VCPKG_DIR}/lib/libjpeg.a")
+include_directories(
+    ${GLEW_INCLUDE_DIR}
+    ${PNG_INCLUDE_DIR}
+    ${JPEG_INCLUDE_DIR}
+)
+set(CMAKE_TOOLCHAIN_FILE "E:/Git/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file" FORCE)
 set(PANGOLIN_VERSION_MAJOR 0)
 set(PANGOLIN_VERSION_MINOR 5)
 set(PANGOLIN_VERSION ${PANGOLIN_VERSION_MAJOR}.${PANGOLIN_VERSION_MINOR})
@@ -20,9 +33,9 @@ option( BUILD_EXAMPLES "Build Examples" OFF )
 
 if(_WIN_)
     option( BUILD_SHARED_LIBS    "Build Shared Library" OFF)
-    option( BUILD_EXTERN_GLEW    "Automatically download, build and compile GLEW" ON)
-    option( BUILD_EXTERN_LIBPNG  "Automatically download, build and compile libpng" ON)
-    option( BUILD_EXTERN_LIBJPEG "Automatically download, build and compile libjpeg" ON)
+    option( BUILD_EXTERN_GLEW    "Automatically download, build and compile GLEW" OFF)
+    option( BUILD_EXTERN_LIBPNG  "Automatically download, build and compile libpng" OFF)
+    option( BUILD_EXTERN_LIBJPEG "Automatically download, build and compile libjpeg" OFF)
     option( MSVC_USE_STATIC_CRT  "Use static C Runtime with MSVC, /MT instead of /MD" ON)
 
     # Make sure there are no erroneous C Runtime flags

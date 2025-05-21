@@ -92,33 +92,57 @@ std::string strToUpper(const std::string& s)
   return ret;
 }
 
-std::string formatString(const char* fmt, ...)
-{
-  char* auxPtr = NULL;
+std::string formatString(const char* fmt, ...) {
   va_list arg_list;
   va_start(arg_list, fmt);
-  int numChar = vasprintf(&auxPtr, fmt, arg_list);
-  va_end(arg_list);
-  string retString;
-  if (numChar != -1)
-    retString = auxPtr;
-  else {
-    cerr << __PRETTY_FUNCTION__ << ": Error while allocating memory" << endl;
+  
+  // Windows下计算所需缓冲区大小
+  const int len = _vscprintf(fmt, arg_list);
+  if (len <= 0) {
+      va_end(arg_list);
+      std::cerr << __FUNCTION__ << ": Invalid format string" << std::endl;
+      return "";
   }
-  free(auxPtr);
-  return retString;
+
+  // 分配缓冲区 (+1用于空终止符)
+  char* buffer = new char[len + 1];
+  const int written = vsnprintf(buffer, len + 1, fmt, arg_list);
+  va_end(arg_list);
+
+  std::string result;
+  if (written == len) {
+      result.assign(buffer, len);
+  } else {
+      std::cerr << __FUNCTION__ << ": Formatting error" << std::endl;
+  }
+
+  delete[] buffer;
+  return result;
 }
 
-int strPrintf(std::string& str, const char* fmt, ...)
-{
-  char* auxPtr = NULL;
+int strPrintf(std::string& str, const char* fmt, ...) {
   va_list arg_list;
   va_start(arg_list, fmt);
-  int numChars = vasprintf(&auxPtr, fmt, arg_list);
+  
+  const int len = _vscprintf(fmt, arg_list);
+  if (len <= 0) {
+      va_end(arg_list);
+      str.clear();
+      return -1;
+  }
+
+  char* buffer = new char[len + 1];
+  const int written = vsnprintf(buffer, len + 1, fmt, arg_list);
   va_end(arg_list);
-  str = auxPtr;
-  free(auxPtr);
-  return numChars;
+
+  if (written == len) {
+      str.assign(buffer, len);
+  } else {
+      str.clear();
+  }
+
+  delete[] buffer;
+  return written;
 }
 
 std::string strExpandFilename(const std::string& filename)
